@@ -9,7 +9,9 @@ class Persona():
         self.email=email
 
     def to_JSON(self):
+
         return {
+            
             'id': self.id,
             'nombre': self.nombre,
             'usuario': self.usuario,
