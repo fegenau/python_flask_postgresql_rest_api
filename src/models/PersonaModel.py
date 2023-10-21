@@ -1,6 +1,6 @@
 
 from flask import jsonify, request
-from flask_cors import CORS
+
 from database.db import get_connection
 from .entities.Persona import Persona
 
