@@ -49,27 +49,21 @@ class PersonaModel():
             raise Exception(ex)
 
     @classmethod
-    def post_login(self,usuario, contrasena):
+    def post_login(self,usuario, password):
         try:
             connection = get_connection()
-
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT id, nombre, usuario, contraseña, tipo, rut, email FROM persona WHERE usuario = %s AND contraseña = %s", (usuario, contrasena))
-                row = cursor.fetchall()
-                row = None
+                    "SELECT id, nombre, usuario, contrasena, tipo, rut, email FROM persona WHERE usuario = %s AND contrasena = %s", (usuario, password))
+                row = cursor.fetchone()
+                persona = None
                 if row != None:
                     persona = Persona(
                         row[0], row[1], row[2], row[3], row[4], row[5], row[6]
                         )
-                    row = persona.to_JSON()
+                    persona = persona.to_JSON()
 
             connection.close()
-
-            if row:
-                return jsonify({'message': 'Autenticación exitosa', 'persona': row}), 200
-            else:
-                return jsonify({'message': 'Credenciales incorrectas'}), 401
-
+            return persona
         except Exception as ex:
             return jsonify({'error': str(ex)}), 500
