@@ -15,12 +15,12 @@ class PersonaModel():
 
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT id, nombre, usuario, contraseña, tipo, rut, email FROM persona ORDER BY nombre ASC")
+                    "SELECT id, nombre, usuario, contraseña, tipo, rut, email, carrera FROM persona ORDER BY nombre ASC")
                 resultset = cursor.fetchall()
 
                 for row in resultset:
                     persona = Persona(
-                        row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+                        row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
                     personas.append(persona.to_JSON())
 
             connection.close()
@@ -55,12 +55,12 @@ class PersonaModel():
             connection = get_connection()
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT id, nombre, usuario, contrasena, tipo, rut, email FROM persona WHERE usuario = %s AND contrasena = %s", (usuario, password))
+                    "SELECT id, nombre, usuario, contrasena, tipo, rut, email, carrera, apellidop FROM persona WHERE usuario = %s AND contrasena = %s", (usuario, password))
                 row = cursor.fetchone()
                 persona = None
                 if row != None:
                     persona = Persona(
-                        row[0], row[1], row[2], row[3], row[4], row[5], row[6]
+                        row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
                         )
                     persona = persona.to_JSON()
 
