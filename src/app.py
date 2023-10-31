@@ -1,11 +1,12 @@
 from flask import Flask
-
+from flask_cors import CORS
 from config import config
 
 # Routes
 from routes import Persona
 
 app = Flask(__name__) 
+cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8100"}})
 
 
 def page_not_found(error):
