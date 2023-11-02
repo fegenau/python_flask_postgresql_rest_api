@@ -15,6 +15,15 @@ def get_personas():
         return jsonify({'message': str(ex)}), 500
 
 
+@main.route('/asignatura')
+def get_asignatura():
+    try:
+        asignatura = PersonaModel.get_asignatura()
+        return jsonify(asignatura)
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500    
+
+
 @main.route('/<string:usuario>')
 def get_persona(usuario):
     try:

@@ -17,7 +17,8 @@ if __name__ == '__main__':
     app.config.from_object(config['development'])
 
     # Blueprints 
-    app.register_blueprint(Persona.main, url_prefix='/api/persona')
+    app.register_blueprint(Persona.main, url_prefix='/api/persona'),
+    
 
     #Error handlers
     app.register_error_handler(404,page_not_found)
