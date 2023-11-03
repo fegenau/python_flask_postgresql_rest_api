@@ -95,3 +95,44 @@ class PersonaModel():
         except Exception as ex:
             # Lanzar la excepción para que pueda ser manejada en otra parte
             raise Exception(ex)
+
+    @classmethod
+    def post_asignatura(self,sigla):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT id, nombre, sigla FROM asignatura WHERE sigla = %s ", (sigla))
+                row = cursor.fetchone()
+                asignatura = None
+                if row != None:
+                    asignatura = Asignatura(
+                        row[0], row[1], row[2]
+                        )
+                    asignatura = asignatura.to_JSON()
+
+            connection.close()
+            return asignatura
+        except Exception as ex:
+            return jsonify({'error': str(ex)}), 500
+        
+    @classmethod
+    def get_asignatura(self, sigla):
+        try:
+            connection = get_connection()
+
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT id, nombre, sigla FROM asignatura WHERE sigla = %s", (sigla))
+                row = cursor.fetchone()
+
+                asignatura = None
+                if row != None:
+                    asignatura = Asignatura(
+                        row[0], row[1], row[2])
+                    asignatura = asignatura.to_JSON()
+
+            connection.close()
+            return asignatura
+        except Exception as ex:
+            raise Exception(ex)

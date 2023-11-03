@@ -15,8 +15,8 @@ def get_personas():
         return jsonify({'message': str(ex)}), 500
 
 
-@main.route('/asignatura')
-def get_asignatura():
+@main.route('/asignaturas')
+def get_asignaturas():
     try:
         asignatura = PersonaModel.get_asignatura()
         return jsonify(asignatura)
@@ -48,3 +48,24 @@ def post_login():
     except Exception as ex:
         return jsonify({'message': str(ex)}), 501
 
+@main.route('/asignatura', methods=['POST'])
+def post_asignatura():
+    sigla = request.json.get('sigla')
+    try:
+        asignatura = PersonaModel.post_asignatura(sigla)    
+        
+        return jsonify(asignatura)
+        
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 501
+    
+@main.route('/<string:sigla>')
+def get_asignatura(sigla):
+    try:
+        asignatura = PersonaModel.get_asignatura(sigla)
+        if asignatura != None:
+            return jsonify(asignatura)
+        else:
+            return jsonify({}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
