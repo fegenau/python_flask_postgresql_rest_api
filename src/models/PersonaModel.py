@@ -3,7 +3,7 @@ from flask import jsonify, request
 
 from database.db import get_connection
 from .entities.Persona import Persona
-from .entities.Asignatura import Asignatura
+from .entities.Asignatura import Asistencia
 
 
 class PersonaModel():
@@ -70,69 +70,40 @@ class PersonaModel():
         except Exception as ex:
             return jsonify({'error': str(ex)}), 500
 
+
     @classmethod
-    def get_asignatura(self):
+    def post_asistencia(self,nombre_alumno,sigla):
         try:
-            # Establecer conexión con la base de datos
             connection = get_connection()
-            asignaturas = []
-            
             with connection.cursor() as cursor:
-                # Ejecutar consulta SQL
                 cursor.execute(
-                    "SELECT id, nombre, sigla FROM asignatura ORDER BY nombre ASC")
+                    "INSERT INTO asistencia (nombre_alumno, sigla) VALUES (%s,%s)", (nombre_alumno,sigla))
+                connection.commit()
+            connection.close()
+        except Exception as ex:
+            return jsonify({'success': True}), 200
+        
+    """ obtener la asistencia """
+    @classmethod
+    def get_asistencia(self, sigla):
+        try:
+            connection = get_connection()
+            asistencia = []
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT nombre_alumno, sigla FROM asistencia WHERE sigla = %s", (sigla,))
                 resultset = cursor.fetchall()
 
-                # Iterar sobre los resultados y crear objetos Asignatura
                 for row in resultset:
-                    asignatura = Asignatura(
-                        row[0], row[1], row[2])
-                    asignaturas.append(asignatura.to_JSON())
+                    asistencia = Asistencia(
+                        row[0], row[1])
+                    asistencia.append(asistencia.to_JSON())
 
-            # Cerrar la conexión con la base de datos
             connection.close()
-            return asignaturas
+            return asistencia
         except Exception as ex:
-            # Lanzar la excepción para que pueda ser manejada en otra parte
             raise Exception(ex)
-
-    @classmethod
-    def post_asignatura(self,sigla):
-        try:
-            connection = get_connection()
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT id, nombre, sigla FROM asignatura WHERE sigla = %s ", (sigla))
-                row = cursor.fetchone()
-                asignatura = None
-                if row != None:
-                    asignatura = Asignatura(
-                        row[0], row[1], row[2]
-                        )
-                    asignatura = asignatura.to_JSON()
-
-            connection.close()
-            return asignatura
-        except Exception as ex:
-            return jsonify({'error': str(ex)}), 500
         
-    @classmethod
-    def get_asignatura(self, sigla):
-        try:
-            connection = get_connection()
-
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SELECT id, nombre, sigla FROM asignatura WHERE sigla = %s", (sigla))
-                row = cursor.fetchone()
-
-                asignatura = None
-                if row != None:
-                    asignatura = Asignatura(
-                        row[0], row[1], row[2])
-                    asignatura = asignatura.to_JSON()
-
-            connection.close()
-            return asignatura
-        except Exception as ex:
-            raise Exception(ex)
+    
+        
+    

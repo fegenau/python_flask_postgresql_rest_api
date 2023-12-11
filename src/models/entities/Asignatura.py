@@ -1,13 +1,13 @@
-class Asignatura():
+class Asistencia():
     
-    def __init__(self,id,nombre=None,sigla=None)-> None:
+    def __init__(self,id,nombre_alumno=None,sigla=None)-> None:
         self.id=id
-        self.nombre=nombre
+        self.nombre_alumno=nombre_alumno
         self.sigla=sigla
 
     def to_JSON(self):
         return {
             'id': self.id,
-            'nombre': self.nombre,
+            'nombre_alumno': self.nombre_alumno,
             'sigla':self.sigla,
         }

@@ -6,7 +6,11 @@ from config import config
 from routes import Persona
 
 app = Flask(__name__) 
-cors = CORS(app, resources={r"/api/*": {"origins": "http://localhost:8100"}})
+cors = CORS(app, resources={r"/api/*": {"origins": [
+            "http://localhost:8100","http://192.168.100.2:8100"
+        ]
+    }
+})
 
 
 def page_not_found(error):

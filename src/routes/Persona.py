@@ -69,3 +69,26 @@ def get_asignatura(sigla):
             return jsonify({}), 404
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+    
+@main.route('/asistencia', methods=['POST'])
+def post_asistencia():
+    nombre_alumno = request.json.get('nombre_alumno')
+    sigla = request.json.get('sigla')
+    try:
+        asistencia = PersonaModel.post_asistencia(nombre_alumno,sigla)    
+        
+        return jsonify(asistencia)
+        
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 501
+    
+@main.route('/asistencia/<string:sigla>')
+def get_asistencia(sigla):
+    try:
+        asistencia = PersonaModel.get_asistencia(sigla)
+        if asistencia != None:
+            return jsonify(asistencia)
+        else:
+            return jsonify({}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
